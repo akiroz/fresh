@@ -27,8 +27,7 @@ String password;
 
 BLYNK_WRITE(VPIN_WIFI_CONNECT) {
     if(param.asInt() == 1) {
-        //WiFiBlynk.connectWiFi(ssid.c_str(), password.c_str());
-        // Connect WiFi
+        WiFi.begin(ssid.c_str(), password.c_str());
     }
 }
 
@@ -64,9 +63,18 @@ void pollSerial() {
 }
 
 void setup() {
+    // Fan PWM
+    ledcSetup(0, 25000, 8);
+    ledcAttachPin(2, 0);
+    ledcWrite(0, 0);
+
+    WiFi.mode(WIFI_STA);
+
     Serial2.begin(9600);
+
     Blynk.setDeviceName("Fresh");
     Blynk.begin(auth);
+
     timer.setInterval(1000L, pollWiFi);
     timer.setInterval(500L, pollSerial);
 }
