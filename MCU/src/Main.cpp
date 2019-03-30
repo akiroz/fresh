@@ -3,8 +3,7 @@
 
 #include <Arduino.h>
 #include <WiFi.h>
-#include "BlynkBLE.h"
-#include "BlynkWiFi.h"
+#include <BlynkSimpleEsp32_BLE.h>
 
 #define VPIN_POWER          V0
 #define VPIN_MODE           V1
@@ -28,7 +27,8 @@ String password;
 
 BLYNK_WRITE(VPIN_WIFI_CONNECT) {
     if(param.asInt() == 1) {
-        WiFiBlynk.connectWiFi(ssid.c_str(), password.c_str());
+        //WiFiBlynk.connectWiFi(ssid.c_str(), password.c_str());
+        // Connect WiFi
     }
 }
 
@@ -65,7 +65,7 @@ void pollSerial() {
 
 void setup() {
     Serial2.begin(9600);
-    Blynk.setDeviceName("Air Purifier");
+    Blynk.setDeviceName("Fresh");
     Blynk.begin(auth);
     timer.setInterval(1000L, pollWiFi);
     timer.setInterval(500L, pollSerial);
@@ -73,9 +73,6 @@ void setup() {
 
 void loop() {
     Blynk.run();
-    if(WiFiBlynk.connected()) {
-        WiFiBlynk.run();
-    }
     timer.run();
 }
 
